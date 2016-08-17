@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+
+# Install node dependencies
+update-dependencies
+
+# Run gulp
+gulp $@

@@ -1,0 +1,29 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+
+function install_dependencies {
+  echo "Notice: Updating node packages." >> /dev/stderr
+  npm update  # Install new dependencies
+  touch node_modules  # Touch the directory to make sure it changes
+}
+
+# Update dependencies if changed since last update
+if [ -f package.json ]; then
+  if [[ -d node_modules ]]; then
+    # Get modified times
+    updated=$(date +'%s' -r node_modules)
+    modified=$(find package.json -exec date +'%s' -r {} \; | sort -n -r | head -1 || echo '0')
+
+    # Decide if we need to update requirements
+    if [[ ${modified} -gt ${updated} ]]; then
+      echo "Notice: New node dependencies found." >> /dev/stderr
+      install_dependencies
+    fi
+  else
+    echo "Notice: node_modules not found. Installing dependencies." >> /dev/stderr
+    install_dependencies
+  fi
+else
+  echo "Warning: package.json not found. Not installing node dependencies." >> /dev/stderr
+fi
