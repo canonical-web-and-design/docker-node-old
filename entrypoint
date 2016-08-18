@@ -2,8 +2,12 @@
 
 set -euo pipefail
 
-# Install node dependencies
+# Prepare environment variables
+export WORKDIR=$(pwd)
+export PATH="${WORKDIR}/node_modules/.bin:${PATH}"
+
+# Always make sure node dependencies are up-to-date
 update-dependencies
 
-# Run gulp
-gulp $@
+# Run command
+$@
