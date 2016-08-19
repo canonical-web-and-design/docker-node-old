@@ -4,7 +4,7 @@ set -euo pipefail
 
 function install_dependencies {
   echo "Notice: Updating node packages." >> /dev/stderr
-  npm update  # Install new dependencies
+  npm install  # Install new dependencies
   touch node_modules  # Touch the directory to make sure it changes
 }
 
