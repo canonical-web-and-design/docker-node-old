@@ -15,7 +15,7 @@ if [ -f package.json ]; then
   dependencies_modified=$(date +'%s' -r /app/package.json)
 
   # Decide if we need to update dependent packages
-  if [[ ${dependencies_modified} -gt ${packages_updated} ]]; then
+  if [[ $(ls -l /packages/node_modules | wc -l) -lt 2 ]] || [[ ${dependencies_modified} -gt ${packages_updated} ]]; then
     echo "Notice: New node dependencies found." >> /dev/stderr
     install_dependencies
   fi
