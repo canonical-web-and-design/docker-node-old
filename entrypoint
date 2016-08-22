@@ -5,6 +5,14 @@ set -euo pipefail
 # Prepare environment variables
 export WORKDIR=$(pwd)
 
+# Die if node_modules folder
+if [ -d node_modules ]; then
+  echo "ERROR: Local './node_modules' folder detected."
+  echo "       ubuntudesign/node will need to manage its own node dependencies, and a local node_modules folder makes this impossible."
+  echo "       Please remove or rename './node_modules' to something else."
+  exit 1
+fi
+
 # Always make sure node dependencies are up-to-date
 update-dependencies
 
