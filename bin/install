@@ -4,5 +4,5 @@ set -euo pipefail
 
 (
   cd /packages
-  /usr/local/bin/npm $@
+  /usr/local/bin/npm install $@
 )
