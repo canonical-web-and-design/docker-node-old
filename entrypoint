@@ -4,8 +4,6 @@ set -euo pipefail
 
 # Prepare environment variables
 export WORKDIR=$(pwd)
-export PATH="${WORKDIR}/node_modules/.bin:${PATH}"
-export SASS_PATH="${WORKDIR}/node_modules"
 
 # Always make sure node dependencies are up-to-date
 update-dependencies
