@@ -13,6 +13,13 @@ If no COMMAND is provided, `server` will be run.
 Commands
 ---
 
+The following commands are built-in:
+
 - install: Install new packages (takes the same options as `npm install`)
 - update-dependencies: Update dependencies from the `package.json` file
 - usage: Show these usage instructions
+
+But you can also specify any binaries from the installed NPM dependencies. E.g.:
+
+  $ ./run gulp test
+
