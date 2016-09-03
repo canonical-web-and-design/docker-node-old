@@ -43,7 +43,7 @@ while [[ -n "${1:-}" ]] && [[ "${1:0:1}" == "-" ]]; do
             override_paths+=("$2")
             shift
         ;;
-        -h|--help) commands="usage"; exit ;;
+        -h|--help) commands="usage" ;;
         *) invalid ;;
     esac
     shift

@@ -14,5 +14,6 @@ RUN mkdir -p $APP_MODULES
 RUN mkdir -p $OVERRIDES/.bin
 RUN ln -s /app/package.json /packages/package.json
 
+ADD USAGE.md /USAGE.md
 ADD bin /bin/
 ADD entrypoint /entrypoint
