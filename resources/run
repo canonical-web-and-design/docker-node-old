@@ -59,4 +59,4 @@ echo docker run \
   --volume $(cat .packages-volume-name):/packages/node_modules \
   ${overrides:-} \
   --volume `pwd`:/app \
-  ubuntudesign/node:v1.0.2 $@
+  ubuntudesign/node:v1.0.3 $@
