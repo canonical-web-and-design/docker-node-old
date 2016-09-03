@@ -2,23 +2,11 @@
 
 set -euo pipefail
 
-function install_dependencies {
-  echo "Notice: Updating node packages." >> /dev/stderr
-  install  # Install new dependencies
-  touch /packages/node_modules  # Touch the directory to make sure it changes
-}
-
 # Update dependencies if changed since last update
 if [ -f package.json ]; then
-  # Get modified times
-  packages_updated=$(date +'%s' -r /packages/node_modules)
-  dependencies_modified=$(date +'%s' -r /app/package.json)
-
-  # Decide if we need to update dependent packages
-  if [[ $(ls -l /packages/node_modules | wc -l) -lt 2 ]] || [[ ${dependencies_modified} -gt ${packages_updated} ]]; then
-    echo "Notice: New node dependencies found." >> /dev/stderr
-    install_dependencies
-  fi
+  echo "Notice: Updating node packages." >> /dev/stderr
+  install  # Install new dependencies
+  md5sum package.json > $HASH_FILE  # Save the hash of the installed package.json
 else
   echo "Warning: package.json not found. Not installing node dependencies." >> /dev/stderr
 fi
