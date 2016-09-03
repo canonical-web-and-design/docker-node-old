@@ -68,7 +68,7 @@ A standard `docker-compose.yml` for the `ubuntudesign/node` image:
 # docker-compose.yml
 
 webapp:
-    image: ubuntudesign/node:v1.0.5
+    image: ubuntudesign/node:v1.0.6
     volumes:
       - "packages:/packages/node_modules"
       - .:/app
