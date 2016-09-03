@@ -28,8 +28,11 @@ if grep -q '^docker:' /etc/group && ! groups | grep -q '\bdocker\b'; then
 fi
 
 if [ ! -f .packages-volume-name ]; then
-  uuidgen | sed 's/-//g' | cut -c1-8 > .packages-volume-name
+  hash=$(uuidgen | sed 's/-//g' | cut -c1-8)
+  echo "node-packages-$hash" > .packages-volume-name
 fi
+
+commands=$@
 
 while [[ -n "${1:-}" ]] && [[ "${1:0:1}" == "-" ]]; do
     key="$1"
@@ -40,7 +43,7 @@ while [[ -n "${1:-}" ]] && [[ "${1:0:1}" == "-" ]]; do
             override_paths+=("$2")
             shift
         ;;
-        -h|--help) usage; exit ;;
+        -h|--help) commands="usage"; exit ;;
         *) invalid ;;
     esac
     shift
@@ -54,9 +57,10 @@ if [ -n "${override_paths:-}" ]; then
   done
 fi
 
-echo docker run \
+docker run \
   -ti \
   --volume $(cat .packages-volume-name):/packages/node_modules \
   ${overrides:-} \
   --volume `pwd`:/app \
-  ubuntudesign/node:v1.0.2 $@
+  ubuntudesign/node:v1.0.3 $commands
+
