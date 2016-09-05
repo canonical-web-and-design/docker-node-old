@@ -10,6 +10,7 @@ set -euo pipefail
 # settings
 image_name="ubuntudesign/node:v1.0.7"
 volume_filename=".packages-volume-name"
+volume_name=
 commands=$@
 
 ##
@@ -31,13 +32,6 @@ if grep -q '^docker:' /etc/group && ! groups | grep -q '\bdocker\b'; then
     $$ newgrp docker
     "
 fi
-
-if [ ! -f .packages-volume-name ]; then
-  hash=$(uuidgen | sed 's/-//g' | cut -c1-8)
-  echo "node-packages-$hash" > .packages-volume-name
-fi
-
-volume_name=$(cat $volume_filename)
 
 while [[ -n "${1:-}" ]] && ( [[ "${1:0:1}" == "-" ]] || [[ "${1:0}" == "clean" ]] ); do
     key="$1"
@@ -61,7 +55,7 @@ while [[ -n "${1:-}" ]] && ( [[ "${1:0:1}" == "-" ]] || [[ "${1:0}" == "clean" ]
                 docker rm $containers
             fi
 
-            if docker volume inspect $volume_name &> /dev/null; then
+            if [ -n "$volume_name" ] && docker volume inspect $volume_name &> /dev/null; then
                 echo "Removing volume: $volume_name"
                 docker volume rm $volume_name
             fi
@@ -89,6 +83,13 @@ if [ -n "${override_paths:-}" ]; then
     overrides+=" --volume '$path':/packages/overrides/$module_name"
   done
 fi
+
+if [ ! -f .packages-volume-name ]; then
+  hash=$(uuidgen | sed 's/-//g' | cut -c1-8)
+  echo "node-packages-$hash" > $volume_filename
+fi
+
+volume_name=$(cat $volume_filename)
 
 docker run \
   -ti \
