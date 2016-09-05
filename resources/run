@@ -36,6 +36,11 @@ fi
 while [[ -n "${1:-}" ]] && ( [[ "${1:0:1}" == "-" ]] || [[ "${1:0}" == "clean" ]] ); do
     key="$1"
 
+    invalid() {
+        echo "Command not recognised."
+        commands="usage"
+    }
+
     case $key in
         -l|--local-override-module)
             if [ -z "${2:-}" ]; then invalid; fi
@@ -64,10 +69,7 @@ while [[ -n "${1:-}" ]] && ( [[ "${1:0:1}" == "-" ]] || [[ "${1:0}" == "clean" ]
 
             exit
         ;;
-        *)
-            echo "Command not recognised."
-            commands="usage"
-        ;;
+        *) invalid ;;
     esac
 
     shift
