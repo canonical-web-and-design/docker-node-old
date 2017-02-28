@@ -1,0 +1,1 @@
+docker run  -u `stat -c "%u:%g" .` -v `pwd`:`pwd` -w `pwd` -ti yarn sh

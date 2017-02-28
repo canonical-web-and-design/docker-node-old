@@ -5,32 +5,17 @@ set -euo pipefail
 # Prepare environment variables
 export WORKDIR=$(pwd)
 
-# Die if node_modules folder
-if [ -d node_modules ]; then
-  echo "ERROR: Local './node_modules' folder detected."
-  echo "       ubuntudesign/node will need to manage its own node dependencies, and a local node_modules folder makes this impossible."
-  echo "       Please remove or rename './node_modules' to something else."
-  exit 1
-fi
-
-# Link to binaries for overrides
-find /packages/overrides -executable -regex '/packages/overrides/[^/]+/bin/[^/]+' -print0 | while IFS= read -r -d $'\0' line; do
-  ln -s $line /packages/overrides/.bin/
-done
-
 # Always make sure node dependencies are up-to-date
-if [ -f package.json ]; then
-  # Get old and new hashes
-  packages_hash=$(md5sum package.json)
-  old_packages_hash=""
-  if [ -f $HASH_FILE ]; then old_packages_hash=$(cat $HASH_FILE); fi
+yarn install
 
-  # Update dependencies if hashes differ
-  if [[ "${packages_hash}" != "${old_packages_hash}" ]]; then
-    echo "Notice: New node dependencies found. Updating." >> /dev/stderr
-    update-dependencies
-  fi
-fi
+# Override node modules as required
+modules=$(cd /overrides; ls)
+
+for module in $modules; do
+    rm -rf node_modules/$module
+    cp -r /overrides/$module node_modules/$module
+done
 
 # Run command
 $@
+
