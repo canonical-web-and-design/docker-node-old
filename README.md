@@ -1,3 +1,7 @@
+**Deprecated**: This project is not being actively maintained. See [docker-node](https://github.com/canonical-webteam/docker-node) instead.
+
+---
+
 # ubuntudesign/node docker image
 
 A docker image for running node commands while keeping dependencies up-to-date with dependencies defined in `./package.json`.
